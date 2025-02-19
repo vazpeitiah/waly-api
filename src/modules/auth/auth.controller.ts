@@ -5,7 +5,7 @@ import { loginSchema, userSchema } from './auth.schema'
 import { prisma } from '../../config/db'
 import { generateJWT, getGoogleAuthURL, getGoogleUser } from '../../config/auth'
 
-const FRONTEND_URL = process.env.GOOGLE_FRONTEND_URI || ''
+const FRONTEND_URL = `${process.env.FRONTEND_URL}/login`
 
 export const register = async (
   req: Request,
@@ -28,6 +28,11 @@ export const register = async (
       data: { ...user, password: hashedPassword },
     })
     const token = generateJWT(newUser)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    })
 
     res.json({ success: true, token })
   } catch (error) {
@@ -60,6 +65,11 @@ export const login = async (
       return
     }
     const token = generateJWT(userFound)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    })
 
     res.json({ success: true, token })
   } catch (error) {
@@ -109,7 +119,32 @@ export const loginGoogleCallback = async (
 
     const token = generateJWT(user)
 
-    res.redirect(`${FRONTEND_URL}?token=${token}`)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+    })
+
+    res.redirect(FRONTEND_URL)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const verify = (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.json({ isValid: true })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const logout = (_req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.clearCookie('token')
+    res.json({
+      message: 'Session closed',
+    })
   } catch (error) {
     next(error)
   }

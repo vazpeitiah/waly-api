@@ -5,7 +5,10 @@ import {
   getLoginGoogleUrl,
   loginGoogleCallback,
   register,
+  verify,
+  logout,
 } from './auth.controller'
+import authenticate from '../../middlewares/auth'
 
 dotenv.config()
 
@@ -15,5 +18,7 @@ api.post('/register', register)
 api.post('/login', login)
 api.get('/google', getLoginGoogleUrl)
 api.get('/google/callback', loginGoogleCallback)
+api.get('/verify', authenticate, verify)
+api.post('/logout', authenticate, logout)
 
 export default api
