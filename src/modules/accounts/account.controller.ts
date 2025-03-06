@@ -9,12 +9,8 @@ export const createAccount = async (
   next: NextFunction
 ) => {
   try {
-    const { type, name } = req.body
-    accountSchema.parse({ type, name })
-    const account = await accountService.createAccount({
-      type,
-      name,
-    })
+    const data = accountSchema.parse(req.body)
+    const account = await accountService.createAccount(data)
     res.status(201).json(account)
   } catch (error) {
     next(error)
@@ -61,12 +57,8 @@ export const updateAccount = async (
 ) => {
   try {
     const { id } = req.params
-    const { type, name } = req.body
-    accountSchema.parse({ type, name })
-    const updatedAccount = await accountService.updateAccount(id, {
-      type,
-      name,
-    })
+    const body = accountSchema.parse(req.body)
+    const updatedAccount = await accountService.updateAccount(id, body)
 
     res.status(200).json(updatedAccount)
   } catch (error) {
@@ -81,9 +73,10 @@ export const deleteAccount = async (
 ) => {
   try {
     const { id } = req.params
-    await accountService.deleteAccount(id)
 
-    res.status(200).json({ message: 'Account deleted successfully' })
+    const deletedAccount = await accountService.deleteAccount(id)
+
+    res.status(200).json(deletedAccount)
   } catch (error) {
     next(error)
   }
