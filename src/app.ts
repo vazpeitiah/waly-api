@@ -7,6 +7,7 @@ import transactionRouter from './modules/transactions/transaction.router'
 import accountRouter from './modules/accounts/account.router'
 import categoriesRouter from './modules/categories/category.router'
 import authRouter from './modules/auth/auth.router'
+import userRouter from './modules/user/user.router'
 import authenticate from './middlewares/auth'
 
 import { errorHandler } from './middlewares/errorHandler'
@@ -32,6 +33,7 @@ app.get('/ping', (_req, res) => {
 app.use('/transactions', authenticate, transactionRouter)
 app.use('/accounts', authenticate, accountRouter)
 app.use('/categories', authenticate, categoriesRouter)
+app.use('/user', authenticate, userRouter)
 app.use('/auth', authRouter)
 
 app.use(errorHandler)
