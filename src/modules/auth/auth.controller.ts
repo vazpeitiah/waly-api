@@ -34,7 +34,7 @@ export const register = async (
       sameSite: 'strict',
     })
 
-    res.json({ success: true, token })
+    res.json({ success: true })
   } catch (error) {
     next(error)
   }
@@ -71,7 +71,7 @@ export const login = async (
       sameSite: 'strict',
     })
 
-    res.json({ success: true, token })
+    res.json({ success: true })
   } catch (error) {
     next(error)
   }
