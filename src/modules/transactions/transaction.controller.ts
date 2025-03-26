@@ -24,7 +24,7 @@ export const createTransaction = async (
 }
 
 export const getTransactions = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {

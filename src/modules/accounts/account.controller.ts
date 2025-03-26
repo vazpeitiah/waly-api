@@ -18,7 +18,7 @@ export const createAccount = async (
 }
 
 export const getAccounts = async (
-  req: Request,
+  _req: Request,
   res: Response,
   next: NextFunction
 ) => {
