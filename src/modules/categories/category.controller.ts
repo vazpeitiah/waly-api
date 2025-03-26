@@ -78,9 +78,9 @@ export const deleteCategory = async (
 ) => {
   try {
     const { id } = req.params
-    await categoryService.deleteCategory(id)
+    const deletedCategory = await categoryService.deleteCategory(id)
 
-    res.status(200).json({ message: 'Category deleted successfully' })
+    res.status(200).json(deletedCategory)
   } catch (error) {
     next(error)
   }
