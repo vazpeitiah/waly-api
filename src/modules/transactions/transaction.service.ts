@@ -6,12 +6,7 @@ export const createTransaction = async (
   data: Omit<Transaction, 'id' | 'createdAt'>
 ) => {
   return await prisma.transaction.create({
-    data: {
-      amount: data.amount,
-      type: data.type,
-      description: data.description,
-      category: data.category,
-    },
+    data,
   })
 }
 

@@ -9,14 +9,8 @@ export const createTransaction = async (
   next: NextFunction
 ) => {
   try {
-    const { amount, type, description, category } = req.body
-    transactionSchema.parse({ amount, type, description, category })
-    const transaction = await transactionService.createTransaction({
-      amount,
-      type,
-      description,
-      category,
-    })
+    const data = transactionSchema.parse(req.body)
+    const transaction = await transactionService.createTransaction(data)
     res.status(201).json(transaction)
   } catch (error) {
     next(error)
@@ -63,13 +57,12 @@ export const updateTransaction = async (
 ) => {
   try {
     const { id } = req.params
-    const { amount, type, description, category } = req.body
-    const updatedTransaction = await transactionService.updateTransaction(id, {
-      amount,
-      type,
-      description,
-      category,
-    })
+
+    const data = transactionSchema.partial().parse(req.body)
+    const updatedTransaction = await transactionService.updateTransaction(
+      id,
+      data
+    )
 
     res.status(200).json(updatedTransaction)
   } catch (error) {
